@@ -1,0 +1,12 @@
+<h1>Terminated: This is uncaught scenario</h1>
+
+<h2>Script log:</h2>
+<pre>
+${pdict.ScriptLog}
+</pre>
+<isif condition="${pdict.ErrorText}">
+<pre>
+ErrorText	:${pdict.ErrorText}
+Exception	:${pdict.Exception}
+</pre>
+</isif>

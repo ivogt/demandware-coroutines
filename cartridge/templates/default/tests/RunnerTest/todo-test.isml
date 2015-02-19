@@ -1,0 +1,42 @@
+
+<h2>TODO app:</h2>
+
+
+<form action="${URLUtils.httpsContinue()}" method="post">
+<fieldset>
+		<isif condition="${pdict.Directive.scope.error}">
+			${pdict.Directive.scope.error}
+		</isif>
+		<div class="form-row form-row-button">
+			<input type="text" name="name" value=""  width="150"/>
+			<input type="submit"
+				value="Add"
+				name="directive_action_add" />
+			<input type="submit" 
+				value="Remove resolved"
+				name="directive_action_removeResolved" />
+		</div>
+	</fieldset>
+	<ul>
+	<isloop items="${pdict.Directive.scope.todos}" var="todo" status="loopstate">
+		<li>
+			<dl>
+				<dt><isif condition="${todo.resolved}">[DONE]</isif>${todo.text}</dt>
+				<dd>Actions: <input type="submit"
+						value="Remove"
+						name="directive_action_remove_${loopstate.index}" />
+						<input type="submit"
+						value="Resolve"
+						name="directive_action_resolve_${loopstate.index}" />
+				</dd>
+			</dl>
+		</li>
+	</isloop>
+	</ul>
+	
+</form>
+<iscomment>
+<pre>
+${pdict.ScriptLog}
+</pre>
+</iscomment>

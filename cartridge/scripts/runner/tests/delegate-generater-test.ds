@@ -1,0 +1,77 @@
+
+/**
+*
+* @output Delegate : Object 		Delegate to excecute
+*
+*/
+
+importPackage( dw.system );
+
+function execute( args : PipelineDictionary ) : Number
+{	
+	var Noop = require('~/cartridge/scripts/directives/noop');
+	var noopGeneratorFuction = function (){
+			  yield new Noop();
+	}
+	var Delegate = require('Delegates').Delegate;
+	var Delegater = new Delegate(function Generators(){
+		//0
+		
+		var item = yield function InternalGenerator1(){
+			yield "Just a test!"
+		};
+		this.log("Received:" + JSON.stringify(item));
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+		yield noopGeneratorFuction;
+	
+	}).run("TestDelegate");
+	args.Delegate = Delegater;
+   return PIPELET_NEXT;
+}

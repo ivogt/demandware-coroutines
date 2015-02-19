@@ -1,0 +1,47 @@
+
+<h2>Login app:</h2>
+
+
+<form action="${URLUtils.httpsContinue()}" method="post">
+	<p>
+		<isif condition="${pdict.Directive.scope.customer && pdict.Directive.scope.customer.authenticated}">
+			You are ${pdict.Directive.scope.customer.profile.firstName}. Nice name btw! 
+			<div>
+				<input type="submit"
+						value="Logout"
+						name="directive_action_logout" />
+			</div>
+		<iselse>
+		You are Anonymous! Why not login ;)
+		<fieldset>
+				<isif condition="${pdict.Directive.scope.error}">
+					${pdict.Directive.scope.error}
+				</isif>
+				<div class="form-row form-row-button">
+					<div class="form-row form-row-button">
+						<dl>
+							<dt>username:</dt>
+							<dd><input type="text" name="login" value="${pdict.Directive.scope.login || ''}"  width="150"/></dd>
+						</dl>
+						<dl>
+							<dt>password:</dt>
+							<dd><input type="password" name="password" value="${pdict.Directive.scope.password || ''}"  width="150"/></dd>
+						</dl>
+						
+					</div>
+					<input type="submit"
+						value="Login"
+						name="directive_action_login" />
+				
+				</div>
+			</fieldset>
+		</isif>
+	</p>
+
+	
+</form>
+<iscomment>
+<pre>
+${pdict.ScriptLog}
+</pre>
+ </iscomment>

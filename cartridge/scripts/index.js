@@ -1,0 +1,1 @@
+module.exports = require('Delegates/cartridge/scripts/lib/Delegate');

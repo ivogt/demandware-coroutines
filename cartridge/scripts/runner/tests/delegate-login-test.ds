@@ -1,0 +1,81 @@
+
+/**
+*
+* @output Delegate : Object 		Delegate to excecute
+*
+*/
+
+importPackage( dw.system );
+
+function execute( args : PipelineDictionary ) : Number
+{	
+	
+	function castParamsToObject (httpParameters){
+		let actionPrefix = "directive";
+		let casted = { action : []},params=httpParameters;
+		for(param in params){
+			let [value] = params[param];//destructure to [0]
+			casted[param] = value;
+			let [directive,action] = param.split('_');
+			if(directive == "directive" && action == "action"){
+				casted['action'] = param.split('_').slice(2);
+			}
+		}
+		return casted;
+	}
+	var URLUtils : dw.web.URLUtils = require("dw/web/URLUtils");
+	var Delegate = require('Delegates').Delegate;
+	
+	
+	/**
+	  *	Directives
+	  */
+	var GetCustomer = require('~/cartridge/scripts/directives/customer-get');
+	var Login = require('~/cartridge/scripts/directives/customer-login');
+	var RenderContinue = require('~/cartridge/scripts/directives/render-continue');
+	var Noop = require('~/cartridge/scripts/directives/noop');
+	
+	args.Delegate = new Delegate(function Login$generator(){
+		var customer = yield new GetCustomer();
+		//trace("Customer: " + customer);
+		var Render =  new RenderContinue({template:"tests/RunnerTest/login-test" , customer: customer });
+		let output = yield Render.handle(function interaction$handler( params ){
+						this.error = undefined;
+						var params = castParamsToObject(params);
+						trace("params:" +JSON.stringify(params));
+						if(!!params.action && !!params.action.length){
+							
+							let [action,index] =  params.action;
+							switch(action){
+								case "login":
+										var loginCall = new Login({ login:params.login , password:params.password,rememberme:null })
+										var customer = yield loginCall;
+										this.customer = customer;
+										var {error} = loginCall;
+										if(!!error){
+											this.error = "No customer with this login/password combination!";
+											yield this.retry();
+										}
+										trace("login result:" + JSON.stringify(customer));
+										
+										break;
+								case "logout":
+										var LogoutDirective = require('~/cartridge/scripts/directives/customer-logout');
+										var customer = yield new LogoutDirective();
+										this.customer =customer;
+										
+									break;
+								default:
+								break;
+							}
+						}
+						
+						
+						
+					});
+		trace(URLUtils.httpsContinue());
+		yield;
+	
+	}).run("TestDelegate");
+   return PIPELET_NEXT;
+}

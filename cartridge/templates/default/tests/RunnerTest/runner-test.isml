@@ -1,0 +1,5 @@
+Runner test
+<h2>Script log:</h2>
+<pre>
+${pdict.ScriptLog}
+</pre>

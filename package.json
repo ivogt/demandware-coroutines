@@ -1,0 +1,15 @@
+{
+  "name": "Delegates",
+  "version": "0.0.1",
+  "author": "Ivo Todorov <ivo.gtodorov@gmail.com>",
+  "description": "",
+  "contributors": [ 
+    {
+      "name": "Ivo Todorov",
+      "email": "ivo.gtodorov@gmail.com"
+    }
+  ],
+  "main": "./cartridge/scripts/index.js",
+  "repository": {
+  }
+}

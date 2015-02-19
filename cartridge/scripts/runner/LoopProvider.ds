@@ -1,0 +1,51 @@
+/**
+*
+* @input inboundDelegate : Object 	This is the delegate instance
+* @input lastDirective : Object 	This is the last called directive , called in the previous loop
+* @input ScriptLog : Object 	ScriptLog
+* @output Directive : Object 		Directive to excecute
+* @output DirectivePipeline : String 		Directive to excecute
+*
+*/
+var isDelegate = require('../lib/Delegate').isDelegate;
+var isDirective = require('../lib/Directive').isDirective;
+importPackage( dw.system );
+
+function execute( args : PipelineDictionary ) : Number
+{	
+	if(!args.ScriptLog) trace("LoopProvider: Delegating....");
+	let PreviousScritLog = args.ScriptLog || "------------- Begin ----------------\n";
+	//preserve the scriptlog so far
+	trace( PreviousScritLog + "[EVENT LOOP]");
+	let inboundDelegate = args.inboundDelegate;
+	let traceDelegate = inboundDelegate.log.bind(inboundDelegate);
+	let lastDirective = args.lastDirective || null;
+	
+	if(!isDelegate(inboundDelegate)){
+		traceDelegate("Expecting inboundDelegate to be delegate!");
+		return PIPELET_ERROR;
+	}
+	
+	try{
+		if(!!lastDirective){
+			args.Directive = inboundDelegate.delegate.send(lastDirective) || null;
+		}else{
+			args.Directive = inboundDelegate.delegate.next() || null;
+		}
+		
+		if(!empty(args.Directive) && !isDirective(args.Directive)){
+			throw new Error("LoopProvider handles only directives. \n\nInspect:" + JSON.stringify(inboundDelegate));
+		}
+	}catch(e){
+		traceDelegate("Can't progress delegate " + inboundDelegate.name +  "(to step " + (inboundDelegate._step + 1) + ") due to error:");
+		traceDelegate(e + "\nStack trace:\n");
+		traceDelegate(e.stack);
+		return PIPELET_ERROR;
+	}
+	
+	args.DirectivePipeline = !!args.Directive ? args.Directive.pipeline : null;
+	if(empty(args.Directive)){
+		traceDelegate("Iteration completed!");
+	}
+   return PIPELET_NEXT;
+}

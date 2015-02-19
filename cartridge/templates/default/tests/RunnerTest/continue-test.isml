@@ -1,0 +1,16 @@
+Runner test
+<h2>Script log:</h2>
+<form action="${URLUtils.httpsContinue()}" method="post">
+	<fieldset>
+		<div class="form-row form-row-button">
+			<input type="hidden" name="name.co" value="yo" />
+			<button type="submit"
+				value="Run"
+				name="Action1">
+				Run</button>
+		</div>
+	</fieldset>
+</form>
+<pre>
+${pdict.ScriptLog}
+</pre>
