@@ -17,8 +17,8 @@ function padding (str,repeat){
 	for(let i=0;i<repeat;i++) str +=str+"";
 	return str;
 }
-var Delegate = Class.extend({
-	name : "Delegate",
+var CO = Class.extend({
+	name : "CO",
 	"continue" : false, 
 	_pad : "",
 	_originalPad : "	>",
@@ -27,9 +27,9 @@ var Delegate = Class.extend({
 	_scriptLog : "",
 	_startTime : undefined,
 	_running : false,
-	delegate : undefined,
+	CO : undefined,
 	log : function (msg){
-		trace("delegate [" + this.name + "] "+ this._pad +" " + this._step +" " + msg);
+		trace("CO [" + this.name + "] "+ this._pad +" " + this._step +" " + msg);
 	},
 	addScriptLog : function (name , log){
 		
@@ -45,17 +45,17 @@ var Delegate = Class.extend({
 			this._generatorIterator = generator;
 			return;
 		}
-		throw Error("Delegate error: you must construct delegate with GeneratorFunction!");
+		throw Error("CO error: you must construct CO with GeneratorFunction!");
 	},
 	run : function (name) {
 		this.name = name;
 		this._startTime = new Date();
-		this.delegate = this.drain(this._generatorIterator);
+		this.coroutine = this.drain(this._generatorIterator);
 		this._running = true;
 		return this;
 	},
-	drain : function Delegate$drain ( delegateFunction ) {
-		let currentNext=delegateFunction,sended = null,stack =[],current=0,backToPrevious=false,pad="";
+	drain : function CO$drain ( COFunction ) {
+		let currentNext=COFunction,sended = null,stack =[],current=0,backToPrevious=false,pad="";
         for(let i=0;;i++){
         	let startTime = new Date();
                 try{
@@ -130,11 +130,11 @@ var Delegate = Class.extend({
         yield;//must provide empty(null) directive to LoopProvider!
 	},
 	
-	__isDelegate : true,
+	__isCO : true,
 
 });
 module.exports.Directive = Directive;
-module.exports.Delegate = Delegate;
-module.exports.isDelegate = function Delegate$isDelegate(o){
-	return (typeof(o) === "object" && '__isDelegate' in o);
+module.exports.CO = CO;
+module.exports.isCO = function CO$isCO(o){
+	return (typeof(o) === "object" && '__isCO' in o);
 };

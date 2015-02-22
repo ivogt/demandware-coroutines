@@ -22,6 +22,7 @@
           <config-property key="Timeout" value="300"/>
           <key-binding alias="ScriptLog" key="ScriptLog"/>
           <key-binding alias="Delegate" key="Delegate"/>
+          <key-binding alias="Coroutine" key="Coroutine"/>
         </pipelet-node>
         <node-display x="0" y="2"/>
         <branch basename="b2" source-connector="error">
@@ -47,7 +48,7 @@
         </transition-display>
       </simple-transition>
       <node>
-        <jump-node start-name-ref="Delegate-Run"/>
+        <jump-node start-name-ref="Coroutine-Run"/>
         <node-display x="0" y="1"/>
       </node>
     </segment>
@@ -71,6 +72,7 @@
           <config-property key="Timeout" value="300"/>
           <key-binding alias="ScriptLog" key="ScriptLog"/>
           <key-binding alias="Delegate" key="Delegate"/>
+          <key-binding alias="Coroutine" key="Coroutine"/>
         </pipelet-node>
         <node-display x="0" y="2"/>
         <branch basename="b2" source-connector="error">
@@ -96,7 +98,7 @@
         </transition-display>
       </simple-transition>
       <node>
-        <jump-node start-name-ref="Delegate-Run"/>
+        <jump-node start-name-ref="Coroutine-Run"/>
         <node-display x="0" y="1"/>
       </node>
     </segment>
@@ -161,6 +163,7 @@
           <config-property key="ScriptFile" value="runner/tests/delegate-continue-test.ds"/>
           <key-binding alias="ScriptLog" key="ScriptLog"/>
           <key-binding alias="Delegate" key="Delegate"/>
+          <key-binding alias="Coroutine" key="Coroutine"/>
         </pipelet-node>
         <node-display x="0" y="1"/>
         <branch basename="b2" source-connector="error">
@@ -171,7 +174,7 @@
           </transition>
           <segment>
             <node>
-              <jump-node start-name-ref="Delegate-Error"/>
+              <jump-node start-name-ref="Coroutine-Error"/>
               <node-display orientation="horizontal" x="1" y="0"/>
             </node>
           </segment>
@@ -183,7 +186,7 @@
         </transition-display>
       </simple-transition>
       <node>
-        <jump-node start-name-ref="Delegate-Run"/>
+        <jump-node start-name-ref="Coroutine-Run"/>
         <node-display x="0" y="2"/>
       </node>
     </segment>
@@ -206,6 +209,7 @@
           <config-property key="ScriptFile" value="runner/tests/delegate-todo-test.ds"/>
           <key-binding alias="ScriptLog" key="ScriptLog"/>
           <key-binding alias="Delegate" key="Delegate"/>
+          <key-binding alias="Coroutine" key="Coroutine"/>
         </pipelet-node>
         <node-display x="0" y="1"/>
         <branch basename="b2" source-connector="error">
@@ -216,7 +220,7 @@
           </transition>
           <segment>
             <node>
-              <jump-node start-name-ref="Delegate-Error"/>
+              <jump-node start-name-ref="Coroutine-Error"/>
               <node-display orientation="horizontal" x="1" y="0"/>
             </node>
           </segment>
@@ -228,7 +232,7 @@
         </transition-display>
       </simple-transition>
       <node>
-        <jump-node start-name-ref="Delegate-Run"/>
+        <jump-node start-name-ref="Coroutine-Run"/>
         <node-display x="0" y="2"/>
       </node>
     </segment>
@@ -251,6 +255,7 @@
           <config-property key="ScriptFile" value="runner/tests/delegate-login-test.ds"/>
           <key-binding alias="ScriptLog" key="ScriptLog"/>
           <key-binding alias="Delegate" key="Delegate"/>
+          <key-binding alias="Coroutine" key="Coroutine"/>
         </pipelet-node>
         <node-display x="0" y="1"/>
         <branch basename="b2" source-connector="error">
@@ -261,7 +266,7 @@
           </transition>
           <segment>
             <node>
-              <jump-node start-name-ref="Delegate-Error"/>
+              <jump-node start-name-ref="Coroutine-Error"/>
               <node-display orientation="horizontal" x="1" y="0"/>
             </node>
           </segment>
@@ -273,7 +278,7 @@
         </transition-display>
       </simple-transition>
       <node>
-        <jump-node start-name-ref="Delegate-Run"/>
+        <jump-node start-name-ref="Coroutine-Run"/>
         <node-display x="0" y="2"/>
       </node>
     </segment>
