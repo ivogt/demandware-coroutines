@@ -1,7 +1,7 @@
 
 /**
 *
-* @output Delegate : Object 		Delegate to excecute
+* @output Coroutine : Object 		Delegate to excecute
 *
 */
 
@@ -9,11 +9,11 @@ importPackage( dw.system );
 
 function execute( args : PipelineDictionary ) : Number
 {	var URLUtils : dw.web.URLUtils = require("dw/web/URLUtils");
-	var Delegate = require('Delegates').Delegate;
+	var CO = require('CO').CO;
 	var RenderContinue = require('~/cartridge/scripts/directives/render-continue');
 	var Noop = require('~/cartridge/scripts/directives/noop');
 	
-	args.Delegate = new Delegate(function Continuous$Interaction(){
+	args.Coroutine = new CO(function Continuous$Interaction(){
 		var Render =  new RenderContinue({template:"tests/RunnerTest/continue-test"});
 		let output = yield Render.handle(function (result){
 			trace("Scope:"+ this);

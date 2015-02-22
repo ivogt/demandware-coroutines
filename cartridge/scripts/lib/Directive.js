@@ -138,6 +138,6 @@ Directive.create = function Directive$create( definitions ){
 	throw new Error("Directive is defined by providing {name : string , pipeline : string , params : ['requiredParam']} object")
 }
 module.exports.Directive = Directive;
-module.exports.isDirective = function Delegate$isDelegate(o){
+module.exports.isDirective = function CO$isCO(o){
 	return (!!o && typeof(o) === "object" && ('__isDirective' in o))
 };

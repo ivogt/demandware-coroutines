@@ -1,7 +1,7 @@
 
 /**
 *
-* @output Delegate : Object 		Delegate to excecute
+* @output Coroutine : Object 		Delegate to excecute
 *
 */
 
@@ -13,9 +13,8 @@ function execute( args : PipelineDictionary ) : Number
 	var noopGeneratorFuction = function (){
 			  yield new Noop();
 	}
-	var Delegate = require('Delegates').Delegate;
-	var Delegater = new Delegate(function Generators(){
-		//0
+	var CO = require('CO').CO;
+	var Coroutine = new CO(function Generators(){
 		
 		var item = yield function InternalGenerator1(){
 			yield "Just a test!"
@@ -72,6 +71,6 @@ function execute( args : PipelineDictionary ) : Number
 		yield noopGeneratorFuction;
 	
 	}).run("TestDelegate");
-	args.Delegate = Delegater;
+	args.Coroutine = Coroutine;
    return PIPELET_NEXT;
 }

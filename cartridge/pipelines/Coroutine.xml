@@ -18,7 +18,11 @@ goes here.....</description>
   <branch basename="Run">
     <segment>
       <node>
-        <start-node name="Run" secure="false"/>
+        <start-node name="Run" secure="false">
+          <start-parameter value="Coroutine">
+            <description>Instance fo CO:Coroutine</description>
+          </start-parameter>
+        </start-node>
         <node-display x="3" y="1"/>
       </node>
       <transition target-connector="in1" target-path="./+1"/>
@@ -30,7 +34,7 @@ goes here.....</description>
       </node>
       <simple-transition/>
       <node>
-        <call-node start-name-ref="Delegate-LoopProvider"/>
+        <call-node start-name-ref="Coroutine-LoopProvider"/>
         <node-display x="0" y="1"/>
         <branch basename="b2" source-connector="continue">
           <transition target-connector="in">
@@ -122,10 +126,11 @@ goes here.....</description>
           <config-property key="Timeout" value="300"/>
           <config-property key="ScriptFile" value="runner/LoopProvider.ds"/>
           <key-binding alias="ScriptLog" key="ScriptLog"/>
-          <key-binding alias="Delegate" key="inboundDelegate"/>
+          <key-binding alias="Coroutine" key="inboundDelegate"/>
           <key-binding alias="Directive" key="lastDirective"/>
           <key-binding alias="Directive" key="Directive"/>
           <key-binding alias="DirectivePipeline" key="DirectivePipeline"/>
+          <key-binding alias="Coroutine" key="Coroutine"/>
         </pipelet-node>
         <node-display x="0" y="1"/>
         <branch basename="b2" source-connector="error">
@@ -214,7 +219,7 @@ goes here.....</description>
         <interaction-node transaction-required="false">
           <template buffered="true" dynamic="false" name="delegate-terminate"/>
         </interaction-node>
-        <node-display x="0" y="5"/>
+        <node-display x="0" y="6"/>
       </node>
     </segment>
   </branch>

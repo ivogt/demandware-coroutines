@@ -1,1 +1,1 @@
-module.exports = require('Delegates/cartridge/scripts/lib/Delegate');
+module.exports = require('CO/cartridge/scripts/lib/Co');

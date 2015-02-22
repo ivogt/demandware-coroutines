@@ -1,6 +1,6 @@
 /**
 *
-* @output Delegate : Object 		Delegate to excecute
+* @output Coroutine : Object 		Delegate to excecute
 *
 */
 
@@ -11,8 +11,8 @@ function execute( args : PipelineDictionary ) : Number
 	var Noop = require('~/cartridge/scripts/directives/noop');
 	var Render = require('~/cartridge/scripts/directives/render-template');
 	var GetBasket = require('~/cartridge/scripts/directives/get-basket');
-	var Delegate = require('Delegates').Delegate;
-	var Delegater = new Delegate(function (){
+	var CO = require('CO').CO;
+	var Coroutine = new CO(function (){
 		
 		var value = yield new Noop();
 		var value = yield new Noop();
@@ -69,6 +69,6 @@ function execute( args : PipelineDictionary ) : Number
 	
 	}).run("TestDelegate");
 	//trace("Delegate: exported");
-	args.Delegate = Delegater;
+	args.Coroutine = Coroutine;
    return PIPELET_NEXT;
 }

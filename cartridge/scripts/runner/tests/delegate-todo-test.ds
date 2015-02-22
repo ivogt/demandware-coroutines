@@ -1,7 +1,7 @@
 
 /**
 *
-* @output Delegate : Object 		Delegate to excecute
+* @output Coroutine : Object 		Delegate to excecute
 *
 */
 
@@ -22,7 +22,7 @@ function execute( args : PipelineDictionary ) : Number
 		return casted;
 	}
 	var URLUtils : dw.web.URLUtils = require("dw/web/URLUtils");
-	var Delegate = require('Delegates').Delegate;
+	var CO = require('CO').CO;
 	
 	
 	var GetCustomer = require('~/cartridge/scripts/directives/customer-get');
@@ -30,7 +30,11 @@ function execute( args : PipelineDictionary ) : Number
 	var Noop = require('~/cartridge/scripts/directives/noop');
 	var TODOs : Array = [{ id: 1, text : "This is awesome todo task 1!" , resolved: false}
 					, { id: 1, text : "This is awesome todo task 2!", resolved: false} ];
-	args.Delegate = new Delegate(function Todo(){
+					
+					
+					
+	args.Coroutine = new CO(function Todo(){
+		
 		var customer = yield new GetCustomer();
 		var Render =  new RenderContinue({template:"tests/RunnerTest/todo-test" , todos: TODOs});
 		let output = yield Render.handle(function interaction$handler( params ){

@@ -2,7 +2,7 @@
 
 /**
  * Example
- * 	Whithin Delegate
+ * 	Whithin CO
  * 	Delagete(function (){
  * 		yield Application.run();
  * }).run("Running Application!");
