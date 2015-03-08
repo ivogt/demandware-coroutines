@@ -1,5 +1,5 @@
 
-<h2>TODO app:</h2>
+<h2>TODO app:[<a href= "/on/demandware.store/Sites-mandco-Site/default/RunnerTest-Todo">home reset</a>]</h2>
 
 
 <form action="${URLUtils.httpsContinue()}" method="post">
@@ -35,8 +35,6 @@
 	</ul>
 	
 </form>
-<iscomment>
 <pre>
 ${pdict.ScriptLog}
 </pre>
-</iscomment>

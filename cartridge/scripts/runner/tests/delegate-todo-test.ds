@@ -10,7 +10,7 @@ importPackage( dw.system );
 function execute( args : PipelineDictionary ) : Number
 {	function castParamsToObject (httpParameters){
 		let actionPrefix = "directive";
-		let casted = { action : []},params=httpParameters;
+		let casted = { action : []},param,params=httpParameters;
 		for(param in params){
 			let [value] = params[param];//destructure to [0]
 			casted[param] = value;
@@ -37,47 +37,40 @@ function execute( args : PipelineDictionary ) : Number
 		
 		var customer = yield new GetCustomer();
 		var Render =  new RenderContinue({template:"tests/RunnerTest/todo-test" , todos: TODOs});
-		let output = yield Render.handle(function interaction$handler( params ){
-						this.error = undefined;
-						var params = castParamsToObject(params);
-						trace("params:" +JSON.stringify(params));
-						if(!!params.action && !!params.action.length){
-							
-							let [action,index] =  params.action;
-							switch(action){
-								case "add":
-									trace("Action : add");
-									if(!params.name || params.name.length < 3){
-										this.error = "Enter task with minimum 3 symbols! You lazy!";
-										yield this.retry();
-										break;
-									}
-									this.todos.push({
-										id: TODOs.length,
-										text: params.name,
-										resolved :false,
-									});
-									break;
-								case "remove":
-										trace("Action : remove");
-										this.todos.splice(index, 1);
-									break;
-								case "resolve":
-									trace("Action : resolve");
-										let target = this.todos[index];
-										if(!!target){target.resolved = true;}
-									break;
-								case "removeResolved":
-									trace("Action : removeResolved");
-										this.todos = this.todos.filter(function (current){
-											return !current.resolved;
-										});
-									break;
-								default:
-								break;
-							}
-						}
-						
+		let output = yield Render
+		.on('add',function(params){
+			trace("Action : add");
+			if(!params.name || params.name.length < 3){
+				this.error = "Enter task with minimum 3 symbols! You lazy!";
+				yield this.retry();
+				return;
+			}
+			this.todos.push({
+				id: TODOs.length,
+				text: params.name,
+				resolved :false,
+			});
+		})
+		.on('remove',function(params){
+			trace("Action : remove");
+			let [,index] =  params.action;
+			this.todos.splice(index, 1);
+		})
+		.on('resolve',function(params){
+			trace("Action : resolve");
+			let [,index] =  params.action;
+			let target = this.todos[index];
+			if(!!target){target.resolved = true;}
+		})
+		.on('removeResolved',function(params){
+			trace("Action : removeResolved");
+			this.todos = this.todos.filter(function (current){
+				return !current.resolved;
+			});
+		})
+		.handle(function interaction$handler( params ){
+			this.name="handlerrrrrrrrrrrrrrrrrrrrr"
+			trace("Action : submit --- handle");
 						yield this.retry();
 						
 					});

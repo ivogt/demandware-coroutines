@@ -29,14 +29,12 @@ function execute( args : PipelineDictionary ) : Number
 		traceDelegate("Expecting inboundDelegate to be delegate!");
 		return PIPELET_ERROR;
 	}
-	
 	try{
 		if(!!lastDirective){
 			args.Directive = Coroutine.coroutine.send(lastDirective) || null;
 		}else{
 			args.Directive = Coroutine.coroutine.next() || null;
 		}
-		
 		if(!empty(args.Directive) && !isDirective(args.Directive)){
 			throw new Error("LoopProvider handles only directives. \n\nInspect:" + JSON.stringify(Coroutine));
 		}
