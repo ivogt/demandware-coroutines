@@ -61,11 +61,11 @@ var CO = Class.extend({
                 try{
                     if(backToPrevious){
                         backToPrevious=false;
+                        //move this into the catch for performance (1 loop less)
                         currentNext = stack[current].it.send(sended);
                     	continue;
                 	}
                     if(isGeneratorFunction(currentNext)){
-
                          let it = currentNext.call(this);
                         	current = stack.push({
                                 	it:it,
@@ -100,22 +100,23 @@ var CO = Class.extend({
         					this.log("Step " + this._step 
         								+ " Received result successfully for ["+ stack[current].name + "]!" 
         								+ " Duration: " + ((new Date()).getTime() - startTime.getTime()) +"ms"
-        								+ " \n[Finished]"
+        								+ " \n[Finished - " + current + "]"
         								);
         				
         			}else{
-        				this.log("Step " + this._step 
-								+ " Transmitted result successfully for ["+ stack[current].name + "]!" 
-								+ " Duration: " + ((new Date()).getTime() - startTime.getTime()) +"ms"
-								+ " \n[Finished]"
-								);
         				sended = currentNext;
+        				this.log("Step " + this._step  
+								+ " Transmitted result[" + sended + "] successfully for ["+ stack[current].name + "]!" 
+								+ " Duration: " + ((new Date()).getTime() - startTime.getTime()) +"ms"
+								+ " \n[Finished - " + current + "]"
+								);
+        				
         			}
                     
-                    this._step++;
 		    		currentNext = stack[current].it.send(sended);
-		    		
+		    		this._step++;
                 }catch(e if e instanceof StopIteration){
+                	this.log("[Closing] [" + current + "] step " + this._step );
                     current--;
 					let removed = stack.pop();
                     backToPrevious = true;

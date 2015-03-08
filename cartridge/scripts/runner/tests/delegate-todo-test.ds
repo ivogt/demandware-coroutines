@@ -36,15 +36,57 @@ function execute( args : PipelineDictionary ) : Number
 	args.Coroutine = new CO(function Todo(){
 		
 		var customer = yield new GetCustomer();
+		//var Render2 =  new RenderContinue({template:"tests/RunnerTest/todo-test" , todos: TODOs});
 		var Render =  new RenderContinue({template:"tests/RunnerTest/todo-test" , todos: TODOs});
+		
+		
+		Render.use(function auth(){
+			trace("Call USE1");
+			//var customer = yield new GetCustomer();
+			if(!customer.authenticated){
+				trace("you are NOT authenticated!")
+				 let ok = this.ok();
+				var Login = new RenderContinue({template:"tests/RunnerTest/login-test" , customer: customer });
+				Login.on('login',function(){
+					trace("login action.................");
+					//yield this.retry()
+				})
+				yield Login.handle(function (){
+					trace("auth : submit --- handle");
+					yield this.ok();
+				});
+			}else{
+				trace("you are authenticated!")
+			}
+		});
+		
+		
+		
 		let output = yield Render
+//		.on('goInner',function(params){
+//			trace("Action : Go Inner");
+//			yield  Render2
+//			.on('remove',function(params){
+//				trace("Action : remove");
+//				let [,index] =  params.action;
+//				this.todos.splice(index, 1);
+//			})
+//			.on('goBack',function(params){
+//				trace("Action : goBack");
+//				trace("Let go back to origin")
+//				yield this.ok();
+//			})
+//			.handle(function (){
+//			});
+//		})
 		.on('add',function(params){
-			trace("Action : add");
+			trace("Action : add2");
 			if(!params.name || params.name.length < 3){
 				this.error = "Enter task with minimum 3 symbols! You lazy!";
 				yield this.retry();
 				return;
 			}
+			this.error = undefined;
 			this.todos.push({
 				id: TODOs.length,
 				text: params.name,
@@ -69,12 +111,9 @@ function execute( args : PipelineDictionary ) : Number
 			});
 		})
 		.handle(function interaction$handler( params ){
-			this.name="handlerrrrrrrrrrrrrrrrrrrrr"
 			trace("Action : submit --- handle");
-						yield this.retry();
-						
-					});
-		trace(URLUtils.httpsContinue());
+			yield this.retry();
+		});
 		yield;
 	
 	}).run("TestDelegate");

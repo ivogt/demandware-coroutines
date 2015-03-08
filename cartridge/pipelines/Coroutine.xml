@@ -157,7 +157,7 @@ goes here.....</description>
           <transition target-connector="in"/>
           <segment>
             <node>
-              <decision-node condition-key="Delegate['continue']" condition-operator="expr">
+              <decision-node condition-key="Coroutine['continue']" condition-operator="expr">
                 <description>Check if this delagate is expeted to forward the pipeline instead of terminating it</description>
               </decision-node>
               <node-display x="0" y="1"/>

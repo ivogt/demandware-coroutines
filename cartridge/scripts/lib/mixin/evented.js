@@ -55,7 +55,6 @@ function sendEvent(obj,event) {
 	return this;
 }
 function getListeners (obj,eventName){
-	assert("You must pass event name to Evented.geListeners", !!obj && !!eventName);
 	var events = obj.__eventlisteners__
 	if (!events) return [];
 	if(!!events[eventName] && events[eventName].length > 0) return events[eventName];

@@ -34,40 +34,74 @@ function castParamsToObject (httpParameters){
 	return casted;
 }
 
-
-function RetryFunction(){}
-RetryFunction.prototype.toString = function (){
-	return "[Object Retry]"
-}
-RetryFunction.prototype.isRetry = function (obj){
-	return false;
-}
-function OKFunction(){
-	this.toString = function (){return "[Object OK]"}
-}
+var RetryFunction = require('../core/retry');
+var OKFunction = require('../core/ok');
 var Retry = new RetryFunction();
 var OK = new OKFunction();
+var isDirective = function Directive$Continued$isDirective(o){
+	return (!!o && typeof(o) === "object" && ('__isDirective' in o))
+};
 function drainArray (obj, list , context){
 	var itemIndex,next;
 	for( itemIndex in list){
+		
 		var cbCurrent = list[itemIndex];
 		if(!isGeneratorIterator(cbCurrent) && !isGeneratorFunction(cbCurrent)) {
 			cbCurrent.call(obj, context);
 			continue;
 		}
-		next =yield cbCurrent.call(obj, context);
-		if(Retry.isRetry(next)){
-			yield Retry;
-			break;
-		}
-		if(typeof(next) === "object" && next instanceof OKFunction){
-			throw StopIteration; // halt drain for this directive; 
-		}
 		
-	}
-}
+		let stack =[],current=0,next=cbCurrent,response;
+        for(let i=0;;i++){
+        	try{
+        		if(isGeneratorFunction(next)) {
+        			current = stack.push(next.call(obj, context)) -1;
+        			next = stack[current].next();// start
+        			continue;
+        		}
+        		if(isGeneratorIterator(next)){
+        			response = yield next;
+        			//continue;
+        		}
+        		if(isDirective(next)){
+        			//send for execution
+        			response = yield next;
+        		}else{
+        			//handle normally
+        			response = next;
+        			
+        			if( Retry.isRetry(next) || OK.isOK(next)  ){
+        				yield next;
+        				break;
+        			}
+        		}
+        		next = stack[current].send(response);
+        	}catch(e if e instanceof StopIteration){
+        		current--;
+				let removed = stack.pop();
+                if(current <0){
+                	break;
+                }else{
+                	next = stack[current].send(response); // call before we re-run
+                	continue;
+                }
+        	}
+        }//for 2
+	}//for 1
+}//func
+
+var slice = [].slice;
+var URLUtils = require('dw/web/URLUtils');
 module.exports = {
-		
+		"URL" : {
+			Action : function Directive$Continued$action (){
+				var params = slice.call(arguments)
+				return "directive_action_" + params.join('_');
+			},
+			Continue : function Directive$Continued$continue (){
+				return URLUtils.continueURL();
+			}
+		},
 		use : function (cb){
 			this.on('use',cb);
 			return this;
@@ -85,8 +119,7 @@ module.exports = {
 
 			this.on("submit",cb);
 			var uses = this.getEventListeners('use');
-			yield drainArray(this.scope, uses,null);
-			
+			var copraim = yield drainArray(this.scope, uses,null);
 			let submitHandlers = this.getEventListeners('submit');
 			let result,submitResult,actionResult;
 			for(;;){ 
@@ -95,12 +128,13 @@ module.exports = {
 				let [action] = submittedParams['action'];
 				let actionHandlers = this.getEventListeners(action);
 					actionResult = yield drainArray(this.scope, actionHandlers, submittedParams);
-					if(Retry.isRetry(actionResult)) { trace("will retry"); continue;};
-					//submitResult = yield drainArray(this.scope, submitHandlers, submittedParams);
-					if(Retry.isRetry(submitResult)) {trace("will retry2");continue;};
+					submitResult = yield drainArray(this.scope, submitHandlers, submittedParams);
+					if(Retry.isRetry(actionResult)) { continue;};
+					if(Retry.isRetry(submitResult)) { continue;};
+					if(OK.isOK(submitResult) || OK.isOK(actionResult)) { throw StopIteration;};
 					
 			}
-			throw new Error("Directive-continued must be resolved during handle call");
+			//throw new Error("Directive-continued must be resolved during handle call");
 		},
  
 };
