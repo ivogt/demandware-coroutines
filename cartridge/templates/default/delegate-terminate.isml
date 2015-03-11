@@ -8,5 +8,6 @@ ${pdict.ScriptLog}
 <pre>
 ErrorText	:${pdict.ErrorText}
 Exception	:${pdict.Exception}
+Exception2	:${JSON.stringify(pdict.Exception)}
 </pre>
 </isif>

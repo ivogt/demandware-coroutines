@@ -150,7 +150,7 @@
         </transition-display>
       </simple-transition>
       <node>
-        <jump-node start-name-ref="Delegate-Error"/>
+        <jump-node start-name-ref="Coroutine-Error"/>
         <node-display x="0" y="3"/>
       </node>
     </segment>
