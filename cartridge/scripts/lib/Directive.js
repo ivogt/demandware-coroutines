@@ -21,8 +21,8 @@ var assert = require('./core/assert');
 
 
 var Directive = Class
-	.extend(EventedMixin)
 	.extend(PromisifyMixin)
+	.extend(EventedMixin)
 	.extend(ContinuedMixin)
 	.extend({
 	name: "BaseDirective",
@@ -52,8 +52,20 @@ var Directive = Class
 	
 
 	
-	__isDirective : true,
+	
 });
+
+Object.defineProperty(Directive.prototype, '__isDirective', {
+	 value: true, 
+	 enumerable: false, 
+	 writable : false,
+	});
+Object.defineProperty(Directive.prototype, 'actions', {
+	  get: function() { return this.__eventlisteners__ || {} },
+	  set : function(){throw new Error("Cannot modify property actions to instance of Directive@mixed with Evented!");},
+	  enumerable: true,
+	});
+
 Directive.create = function Directive$create( definitions ){
 	let {name , pipeline , params} = definitions || {};
 	

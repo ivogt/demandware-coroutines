@@ -73,7 +73,7 @@ function _indexOf(array, needle) {
 
   
   
-module.exports = {
+var Mixin = {
 
 
   getEventListeners: function(name) {
@@ -97,6 +97,13 @@ module.exports = {
    @return this
   */
   on: function(name, method) {
+	if(typeof(method) == "object" && method.constructor.name == 'Array'){
+		var that = this;
+		method.map(function(callback){
+			addListener(that, name, callback);
+		})
+		return;
+	}
     addListener(this, name, method);
     return this;
   },
@@ -170,5 +177,19 @@ module.exports = {
    */
   has: function(name) {
     return hasListeners(this, name);
-  }
+  },
+  
+  
+  mixin : function ( mixin ){
+		var {actions} =  mixin;
+		
+		if(!!actions && typeof(actions) == "object"){
+			for(action in actions){
+				this.on(action,actions[action])
+			}
+		}
+	return this;
+  },
 };
+
+module.exports = Mixin;

@@ -8,114 +8,27 @@
 importPackage( dw.system );
 
 function execute( args : PipelineDictionary ) : Number
-{	function castParamsToObject (httpParameters){
-		let actionPrefix = "directive";
-		let casted = { action : []},param,params=httpParameters;
-		for(param in params){
-			let [value] = params[param];//destructure to [0]
-			casted[param] = value;
-			let [directive,action] = param.split('_');
-			if(directive == "directive" && action == "action"){
-				casted['action'] = param.split('_').slice(2);
-			}
-		}
-		return casted;
-	}
-	var URLUtils : dw.web.URLUtils = require("dw/web/URLUtils");
+{	
 	var CO = require('CO').CO;
-	
-	
-	var GetCustomer = require('~/cartridge/scripts/directives/customer-get');
 	var RenderContinue = require('~/cartridge/scripts/directives/render-continue');
-	var Noop = require('~/cartridge/scripts/directives/noop');
+	var LoginHandler = require('./handlers/login-required');
+	
 	var TODOs : Array = [{ id: 1, text : "This is awesome todo task 1!" , resolved: false}
 					, { id: 1, text : "This is awesome todo task 2!", resolved: false} ];
 					
 					
-					
+	var TodoAppMixin = require('./app_mixins/todo');			
 	args.Coroutine = new CO(function Todo(){
 		
-		var customer = yield new GetCustomer();
-		//var Render2 =  new RenderContinue({template:"tests/RunnerTest/todo-test" , todos: TODOs});
 		var Render =  new RenderContinue({template:"tests/RunnerTest/todo-test" , todos: TODOs});
+		Render.mixin(TodoAppMixin)
+		Render.use(LoginHandler);
 		
-		
-		Render.use(function auth(){
-			trace("Call USE1");
-			//var customer = yield new GetCustomer();
-			if(!customer.authenticated){
-				trace("you are NOT authenticated!")
-				 let ok = this.ok();
-				var Login = new RenderContinue({template:"tests/RunnerTest/login-test" , customer: customer });
-				Login.on('login',function(){
-					trace("login action.................");
-					//yield this.retry()
-				})
-				yield Login.handle(function (){
-					trace("auth : submit --- handle");
-					yield this.ok();
-				});
-			}else{
-				trace("you are authenticated!")
-			}
-		});
-		
-		
-		
-		let output = yield Render
-//		.on('goInner',function(params){
-//			trace("Action : Go Inner");
-//			yield  Render2
-//			.on('remove',function(params){
-//				trace("Action : remove");
-//				let [,index] =  params.action;
-//				this.todos.splice(index, 1);
-//			})
-//			.on('goBack',function(params){
-//				trace("Action : goBack");
-//				trace("Let go back to origin")
-//				yield this.ok();
-//			})
-//			.handle(function (){
-//			});
-//		})
-		.on('add',function(params){
-			trace("Action : add2");
-			if(!params.name || params.name.length < 3){
-				this.error = "Enter task with minimum 3 symbols! You lazy!";
-				yield this.retry();
-				return;
-			}
-			this.error = undefined;
-			this.todos.push({
-				id: TODOs.length,
-				text: params.name,
-				resolved :false,
-			});
-		})
-		.on('remove',function(params){
-			trace("Action : remove");
-			let [,index] =  params.action;
-			this.todos.splice(index, 1);
-		})
-		.on('resolve',function(params){
-			trace("Action : resolve");
-			let [,index] =  params.action;
-			let target = this.todos[index];
-			if(!!target){target.resolved = true;}
-		})
-		.on('removeResolved',function(params){
-			trace("Action : removeResolved");
-			this.todos = this.todos.filter(function (current){
-				return !current.resolved;
-			});
-		})
-		.handle(function interaction$handler( params ){
-			trace("Action : submit --- handle");
+		yield Render.handle(function interaction$handler( params ){
+			trace("Render-Action : submit --- handle");
 			yield this.retry();
 		});
-		yield;
-	
+		
 	}).run("TestDelegate");
    return PIPELET_NEXT;
 }

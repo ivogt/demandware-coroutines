@@ -41,6 +41,8 @@
 	</ul>
 	
 </form>
+<iscomment>
 <pre>
 ${pdict.ScriptLog}
 </pre>
+</iscomment>
