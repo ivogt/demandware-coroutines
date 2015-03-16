@@ -1,0 +1,26 @@
+
+/**
+*
+* @output Coroutine : Object 		Delegate to excecute
+*
+*/
+
+importPackage( dw.system );
+
+function execute( args : PipelineDictionary ) : Number
+{	
+	var CO = require('CO').CO;
+	
+	var CheckoutApp = require('./app/checkout');
+	
+					
+	args.Coroutine = new CO(function Checkout(){
+		
+		yield CheckoutApp.handle(function (){
+			
+		})
+		
+	
+	}).run("TestDelegate");
+   return PIPELET_NEXT;
+}

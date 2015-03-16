@@ -119,7 +119,7 @@ module.exports = {
 
 			this.on("submit",cb);
 			var uses = this.getEventListeners('use');
-			var copraim = yield drainArray(this.scope, uses,null);
+			 yield drainArray(this.scope, uses,null);
 			let submitHandlers = this.getEventListeners('submit');
 			let result,submitResult,actionResult;
 			for(;;){ 
@@ -134,7 +134,6 @@ module.exports = {
 					if(OK.isOK(submitResult) || OK.isOK(actionResult)) { throw StopIteration;};
 					
 			}
-			//throw new Error("Directive-continued must be resolved during handle call");
 		},
  
 };
